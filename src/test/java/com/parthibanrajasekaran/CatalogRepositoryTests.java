@@ -3,7 +3,6 @@ package com.parthibanrajasekaran;
 import com.parthibanrajasekaran.controller.CatalogController;
 import com.parthibanrajasekaran.model.Catalog;
 import com.parthibanrajasekaran.repository.CatalogRepository;
-import com.parthibanrajasekaran.service.CatalogService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +37,6 @@ public class CatalogRepositoryTests {
         assertEquals(2, result.size());
         assertEquals("Author1", result.get(0).getAuthor());
     }
-
 
 
 }

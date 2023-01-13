@@ -9,11 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SprinpBootRestApplication {
 //public class SprinpBootRestApplication implements CommandLineRunner {
 
-	@Autowired
-	CatalogRepository catalogRepository;
+    @Autowired
+    CatalogRepository catalogRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(SprinpBootRestApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SprinpBootRestApplication.class, args);
+    }
 
 }

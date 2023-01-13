@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CatalogRepositoryCustom {
 
-  List<Catalog> findAllByAuthor(String authorName);
+    List<Catalog> findAllByAuthor(String authorName);
 
 }

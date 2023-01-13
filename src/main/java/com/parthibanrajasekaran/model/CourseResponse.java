@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class CourseResponse {
 
-  @Getter
-  @Setter
-  private String msg;
+    @Getter
+    @Setter
+    private String msg;
 
-  @Getter
-  @Setter
-  private String id;
+    @Getter
+    @Setter
+    private String id;
 
 
 }

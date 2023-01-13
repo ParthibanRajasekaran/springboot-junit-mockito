@@ -1,18 +1,17 @@
 package com.parthibanrajasekaran.repository;
 
 import com.parthibanrajasekaran.model.Catalog;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public class CatalogRepositoryImplementation implements CatalogRepositoryCustom {
 
-  @Autowired
-  CatalogRepository catalogRepository;
+    @Autowired
+    CatalogRepository catalogRepository;
 
-  @Override
-  public List<Catalog> findAllByAuthor(String authorName) {
-    return catalogRepository.findAllByAuthor(authorName);
-  }
+    @Override
+    public List<Catalog> findAllByAuthor(String authorName) {
+        return catalogRepository.findAllByAuthor(authorName);
+    }
 }
