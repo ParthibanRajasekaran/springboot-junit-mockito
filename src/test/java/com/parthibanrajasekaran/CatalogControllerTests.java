@@ -14,11 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.parthibanrajasekaran.controller.LibraryController;
-import com.parthibanrajasekaran.model.BookResponse;
-import com.parthibanrajasekaran.model.Library;
-import com.parthibanrajasekaran.repository.LibraryRepository;
-import com.parthibanrajasekaran.service.LibraryService;
+import com.parthibanrajasekaran.controller.CatalogController;
+import com.parthibanrajasekaran.model.CourseResponse;
+import com.parthibanrajasekaran.model.Catalog;
+import com.parthibanrajasekaran.repository.CatalogRepository;
+import com.parthibanrajasekaran.service.CatalogService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,127 +34,127 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class LibraryControllerTests {
+class CatalogControllerTests {
 
 	@MockBean
-	LibraryService libraryService;
+	CatalogService catalogService;
 
 	@Autowired
-	LibraryController libraryController;
+	CatalogController catalogController;
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
-	LibraryRepository libraryRepository;
+	CatalogRepository catalogRepository;
 
 	@Test
-	public void verifyAddBookIfBookDoesNotExistsWithoutServer(){
-		Library library = buildLibrary();
+	public void verifyAddCourseIfCourseDoesNotExistsWithoutServer(){
+		Catalog catalog = buildInventoryItem();
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestBody = null;
 		try {
-			requestBody = objectMapper.writeValueAsString(buildLibrary());
+			requestBody = objectMapper.writeValueAsString(buildInventoryItem());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
 
-		when(libraryService.createId(library.getIsbn(),library.getAisle())).thenReturn(library.getId());
+		when(catalogService.createId(catalog.getCourse(), catalog.getCategory())).thenReturn(catalog.getId());
 
-		when(libraryService.verifyIfBookWithIdExists(library.getId())).thenReturn(false);
+		when(catalogService.verifyIfCourseWithIdExists(catalog.getId())).thenReturn(false);
 
 		// mocking repository.save and just return the required object
-		when(libraryRepository.save(any())).thenReturn(library);
+		when(catalogRepository.save(any())).thenReturn(catalog);
 
 		try {
 			assert requestBody != null;
-			this.mockMvc.perform(post("/addBook")
+			this.mockMvc.perform(post("/addCourse")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(requestBody))
 					.andDo(print())
 					.andExpect(status().isCreated())
-					.andExpect(jsonPath("$.id").value(library.getId()));
+					.andExpect(jsonPath("$.id").value(catalog.getId()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Test
-	public void AddBookIfBookExists(){
-		Library library = buildLibrary();
+	public void verifyAddCourseIfCourseExistsWithoutServer(){
+		Catalog catalog = buildInventoryItem();
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestBody = null;
 		try {
-			requestBody = objectMapper.writeValueAsString(buildLibrary());
+			requestBody = objectMapper.writeValueAsString(buildInventoryItem());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
 
-		when(libraryService.createId(library.getIsbn(),library.getAisle())).thenReturn(library.getId());
+		when(catalogService.createId(catalog.getCourse(), catalog.getCategory())).thenReturn(catalog.getId());
 
-		when(libraryService.verifyIfBookWithIdExists(library.getId())).thenReturn(true);
+		when(catalogService.verifyIfCourseWithIdExists(catalog.getId())).thenReturn(true);
 
 		// mocking repository.save and just return the required object
-		when(libraryRepository.save(any())).thenReturn(library);
+		when(catalogRepository.save(any())).thenReturn(catalog);
 
 		try {
 			assert requestBody != null;
-			this.mockMvc.perform(post("/addBook")
+			this.mockMvc.perform(post("/addCourse")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(requestBody))
 					.andDo(print())
 					.andExpect(status().isAccepted())
-					.andExpect(jsonPath("$.id").value(library.getId()))
-					.andExpect(jsonPath("$.msg").value("Book already exists"));
+					.andExpect(jsonPath("$.id").value(catalog.getId()))
+					.andExpect(jsonPath("$.msg").value("Course already exists"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Test
-	public void verifyAddBookIfBookDoesNotExists(){
-		Library library = buildLibrary();
+	public void verifyAddCourseIfCourseDoesNotExists(){
+		Catalog catalog = buildInventoryItem();
 
-		when(libraryService.createId(library.getIsbn(),library.getAisle())).thenReturn(library.getId());
+		when(catalogService.createId(catalog.getCourse(), catalog.getCategory())).thenReturn(catalog.getId());
 
-		when(libraryService.verifyIfBookWithIdExists(library.getId())).thenReturn(false);
+		when(catalogService.verifyIfCourseWithIdExists(catalog.getId())).thenReturn(false);
 
-		ResponseEntity<BookResponse> response = libraryController.addBook(buildLibrary());
+		ResponseEntity<CourseResponse> response = catalogController.addCourse(buildInventoryItem());
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
-		BookResponse addBookResponse = response.getBody();
-		assertEquals(library.getId(), addBookResponse.getId());
-		assertEquals("Book has been successfully added", addBookResponse.getMsg());
+		CourseResponse addCourseResponse = response.getBody();
+		assertEquals(catalog.getId(), addCourseResponse.getId());
+		assertEquals("Course has been successfully added", addCourseResponse.getMsg());
 	}
 
 	@Test
-	public void verifyAddBookIfBookExists(){
-		Library library = buildLibrary();
+	public void verifyAddCourseIfCourseExists(){
+		Catalog catalog = buildInventoryItem();
 
-		when(libraryService.createId(library.getIsbn(),library.getAisle())).thenReturn(library.getId());
+		when(catalogService.createId(catalog.getCourse(), catalog.getCategory())).thenReturn(catalog.getId());
 
-		when(libraryService.verifyIfBookWithIdExists(library.getId())).thenReturn(true);
+		when(catalogService.verifyIfCourseWithIdExists(catalog.getId())).thenReturn(true);
 
-		ResponseEntity<BookResponse> response = libraryController.addBook(buildLibrary());
+		ResponseEntity<CourseResponse> response = catalogController.addCourse(buildInventoryItem());
 		assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
 
-		BookResponse addBookResponse = response.getBody();
-		assertEquals(library.getId(), addBookResponse.getId());
-		assertEquals("Book already exists", addBookResponse.getMsg());
+		CourseResponse addCourseResponse = response.getBody();
+		assertEquals(catalog.getId(), addCourseResponse.getId());
+		assertEquals("Course already exists", addCourseResponse.getMsg());
 	}
 
 	@Test
-	public void getBooksByAuthorTest(){
-		List<Library> library = new ArrayList<Library>();
-		library.add(buildLibrary());
-		library.add(buildLibrary());
+	public void getCoursesByAuthorTest(){
+		List<Catalog> catalog = new ArrayList<Catalog>();
+		catalog.add(buildInventoryItem());
+		catalog.add(buildInventoryItem());
 
-		when(libraryRepository.findAllByAuthor(any())).thenReturn(library);
+		when(catalogRepository.findAllByAuthor(any())).thenReturn(catalog);
 
 		try {
-			this.mockMvc.perform(get("/getBook/author").param("authorName","Parthiban Rajasekaran"))
+			this.mockMvc.perform(get("/getCourse/author").param("authorName","Parthiban Rajasekaran"))
 					.andDo(print())
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("$.[0].id").value("SAFe2022"));
@@ -164,34 +164,34 @@ class LibraryControllerTests {
 	}
 
 	@Test
-	public void updateBookTest() throws Exception {
+	public void updateCourseTest() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-		final String	requestBody = objectMapper.writeValueAsString(updateLibrary());
+		final String	requestBody = objectMapper.writeValueAsString(updateInventoryItem());
 
-		Library library = buildLibrary();
-		when(libraryService.verifyIfBookWithIdExists(any())).thenReturn(true);
-		when(libraryService.getBookById(any())).thenReturn(library);
+		Catalog catalog = buildInventoryItem();
+		when(catalogService.verifyIfCourseWithIdExists(any())).thenReturn(true);
+		when(catalogService.getCourseById(any())).thenReturn(catalog);
 
 		assert requestBody != null;
-		this.mockMvc.perform(put("/updateBook/"+library.getId())
+		this.mockMvc.perform(put("/updateCourse/"+ catalog.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestBody))
 			.andDo(print())
 			.andExpect(status().isOk())
-		  .andExpect(jsonPath("$.author").value(updateLibrary().getAuthor()));
+		  .andExpect(jsonPath("$.author").value(updateInventoryItem().getAuthor()));
 	}
 
 	@Test
-	public void updateBookWhenBookDoesNotExistTest() throws Exception {
+	public void updateCourseWhenCourseDoesNotExistTest() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-		final String	requestBody = objectMapper.writeValueAsString(updateLibrary());
+		final String	requestBody = objectMapper.writeValueAsString(updateInventoryItem());
 
-		Library library = buildLibrary();
-		when(libraryService.verifyIfBookWithIdExists(any())).thenReturn(false);
-		when(libraryService.getBookById(any())).thenReturn(library);
+		Catalog catalog = buildInventoryItem();
+		when(catalogService.verifyIfCourseWithIdExists(any())).thenReturn(false);
+		when(catalogService.getCourseById(any())).thenReturn(catalog);
 
 		assert requestBody != null;
-		this.mockMvc.perform(put("/updateBook/"+library.getId())
+		this.mockMvc.perform(put("/updateCourse/"+ catalog.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(requestBody))
 				.andDo(print())
@@ -199,16 +199,16 @@ class LibraryControllerTests {
 	}
 
 	@Test
-	public void deleteBookTest() throws Exception {
+	public void deleteCourseTest() throws Exception {
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		final String	requestBody = objectMapper.writeValueAsString(deleteLibrary());
+		final String	requestBody = objectMapper.writeValueAsString(deleteInventoryItem());
 
-		when(libraryService.verifyIfBookWithIdExists(any())).thenReturn(true);
-		when(libraryService.getBookById(any())).thenReturn(deleteLibrary());
-		doNothing().when(libraryRepository).delete(deleteLibrary());
+		when(catalogService.verifyIfCourseWithIdExists(any())).thenReturn(true);
+		when(catalogService.getCourseById(any())).thenReturn(deleteInventoryItem());
+		doNothing().when(catalogRepository).delete(deleteInventoryItem());
 
-		this.mockMvc.perform(delete("/deleteBook")
+		this.mockMvc.perform(delete("/deleteCourse")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(requestBody))
 				.andDo(print())
@@ -216,16 +216,16 @@ class LibraryControllerTests {
 	}
 
 	@Test
-	public void deleteBookWhenBookDoesNotExistTest() throws Exception {
+	public void deleteCourseWhenCourseDoesNotExistTest() throws Exception {
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		final String	requestBody = objectMapper.writeValueAsString(deleteLibrary());
+		final String	requestBody = objectMapper.writeValueAsString(deleteInventoryItem());
 
-		when(libraryService.verifyIfBookWithIdExists(any())).thenReturn(false);
-		when(libraryService.getBookById(any())).thenReturn(deleteLibrary());
-		doNothing().when(libraryRepository).delete(deleteLibrary());
+		when(catalogService.verifyIfCourseWithIdExists(any())).thenReturn(false);
+		when(catalogService.getCourseById(any())).thenReturn(deleteInventoryItem());
+		doNothing().when(catalogRepository).delete(deleteInventoryItem());
 
-		this.mockMvc.perform(delete("/deleteBook")
+		this.mockMvc.perform(delete("/deleteCourse")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(requestBody))
 				.andDo(print())
@@ -233,58 +233,67 @@ class LibraryControllerTests {
 	}
 
 	@Test
-	public void getAllBooksTest() throws Exception {
-		when(libraryRepository.findAll()).thenReturn(Collections.singletonList(buildLibrary()));
+	public void getAllCoursesTest() throws Exception {
+		when(catalogRepository.findAll()).thenReturn(Collections.singletonList(buildInventoryItem()));
 
-		this.mockMvc.perform(get("/getBooks"))
+		this.mockMvc.perform(get("/getCourses"))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value("SAFe2022"));
 	}
 
 	@Test
-	public void getBookByIdTest() throws Exception {
-		when(libraryService.verifyIfBookWithIdExists(any())).thenReturn(true);
-		when(libraryService.getBookById(any())).thenReturn(buildLibrary());
+	public void getCourseByIdTest() throws Exception {
+		when(catalogService.verifyIfCourseWithIdExists(any())).thenReturn(true);
+		when(catalogService.getCourseById(any())).thenReturn(buildInventoryItem());
 
-		this.mockMvc.perform(get("/getBook/"+buildLibrary().getId()))
+		this.mockMvc.perform(get("/getCourse/"+ buildInventoryItem().getId()))
 				.andDo(print())
 				.andExpect(status().isFound())
 				.andExpect(jsonPath("$.id").value("SAFe2022"));
 	}
 
 	@Test
-	public void getBookByIdWhenBookDoesNotExistTest() throws Exception {
-		when(libraryService.verifyIfBookWithIdExists(any())).thenReturn(false);
-		when(libraryService.getBookById(any())).thenReturn(buildLibrary());
+	public void getCourseByIdWhenCourseDoesNotExistTest() throws Exception {
+		when(catalogService.verifyIfCourseWithIdExists(any())).thenReturn(false);
+		when(catalogService.getCourseById(any())).thenReturn(buildInventoryItem());
 
-		this.mockMvc.perform(get("/getBook/"+buildLibrary().getId()))
+		this.mockMvc.perform(get("/getCourse/"+ buildInventoryItem().getId()))
 				.andDo(print())
 				.andExpect(status().isNotFound());
 	}
 
-	private Library buildLibrary(){
-		Library library = new Library();
-		library.setBook_name("SpringBoot");
-		library.setAuthor("Adhvik");
-		library.setAisle(2022);
-		library.setIsbn("SAFe");
-		library.setId("SAFe2022");
-		return library;
+	@Test
+	public void testCatalog() {
+		Catalog catalog = new Catalog("Course1", "1", 1, "Author1");
+
+		assertEquals("Course1", catalog.getCourse());
+		assertEquals("1", catalog.getId());
+		assertEquals(1, catalog.getCategory());
+		assertEquals("Author1", catalog.getAuthor());
 	}
 
-	private Library updateLibrary(){
-		Library library = new Library();
-		library.setBook_name("mockito");
-		library.setAuthor("Rooney");
-		library.setAisle(2022);
-		return library;
+	private Catalog buildInventoryItem(){
+		Catalog catalog = new Catalog();
+		catalog.setCourse("SpringBoot");
+		catalog.setAuthor("Adhvik");
+		catalog.setCategory(2022);
+		catalog.setId("SAFe2022");
+		return catalog;
 	}
 
-	private Library deleteLibrary(){
-		Library library = new Library();
-		library.setId("SAFe2022");
-		return library;
+	private Catalog updateInventoryItem(){
+		Catalog catalog = new Catalog();
+		catalog.setCourse("mockito");
+		catalog.setAuthor("Rooney");
+		catalog.setCategory(2022);
+		return catalog;
+	}
+
+	private Catalog deleteInventoryItem(){
+		Catalog catalog = new Catalog();
+		catalog.setId("SAFe2022");
+		return catalog;
 	}
 
 }

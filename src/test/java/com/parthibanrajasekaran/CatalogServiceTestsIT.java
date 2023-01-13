@@ -2,8 +2,7 @@ package com.parthibanrajasekaran;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.parthibanrajasekaran.model.Library;
-import org.assertj.core.api.Assert;
+import com.parthibanrajasekaran.model.Catalog;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -15,57 +14,51 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
-public class LibraryServiceTestsIT {
+public class CatalogServiceTestsIT {
 
   @Test
-  public void getAuthorNameBooksTest() throws JSONException {
+  public void getAuthorNameForCourseTest() throws JSONException {
 
     String expected = "[\n"
         + "    {\n"
-        + "        \"book_name\": \"appium\",\n"
-        + "        \"id\": \"appium20225\",\n"
-        + "        \"aisle\": 20225,\n"
-        + "        \"isbn\": \"appium\",\n"
-        + "        \"author\": \"Parthiban Rajasekaran\"\n"
+        + "        \"course\": \"Appium\",\n"
+        + "        \"id\": \"Appium44\",\n"
+        + "        \"category\": 44,\n"
+        + "        \"author\": \"Max Musterman\"\n"
         + "    },\n"
         + "    {\n"
-        + "        \"book_name\": \"HP UFT\",\n"
-        + "        \"id\": \"HP UFT20225\",\n"
-        + "        \"aisle\": 20225,\n"
-        + "        \"isbn\": \"HP UFT\",\n"
+        + "        \"course\": \"UFT\",\n"
+        + "        \"id\": \"UFT20225\",\n"
+        + "        \"category\": 20225,\n"
         + "        \"author\": \"Parthiban\"\n"
         + "    },\n"
         + "    {\n"
-        + "        \"book_name\": \"REST Assured\",\n"
-        + "        \"id\": \"REST Assured20225\",\n"
-        + "        \"aisle\": 20225,\n"
-        + "        \"isbn\": \"REST Assured\",\n"
-        + "        \"author\": \"Parthiban\"\n"
+        + "        \"course\": \"RESTAssured\",\n"
+        + "        \"id\": \"RESTAssured2025\",\n"
+        + "        \"category\": 2025,\n"
+         + "        \"author\": \"Parthiban\"\n"
         + "    },\n"
         + "    {\n"
-        + "        \"book_name\": \"SpringBoot\",\n"
-        + "        \"id\": \"SAFe2022\",\n"
-        + "        \"aisle\": 2022,\n"
-        + "        \"isbn\": \"SAFe\",\n"
-        + "        \"author\": \"Adhvik\"\n"
+        + "        \"course\": \"SAFe\",\n"
+        + "        \"id\": \"SAFe2023\",\n"
+        + "        \"category\": 2023,\n"
+        + "        \"author\": \"Rocky\"\n"
         + "    },\n"
         + "    {\n"
-        + "        \"book_name\": \"selenium\",\n"
-        + "        \"id\": \"selenium20225\",\n"
-        + "        \"aisle\": 20225,\n"
-        + "        \"isbn\": \"selenium\",\n"
+        + "        \"course\": \"Selenium\",\n"
+        + "        \"id\": \"Selenium2024\",\n"
+        + "        \"category\": 2024,\n"
         + "        \"author\": \"Parthiban Rajasekaran\"\n"
         + "    },\n"
         + "    {\n"
-        + "        \"book_name\": \"Spring\",\n"
-        + "        \"id\": \"Spring2022\",\n"
-        + "        \"aisle\": 2022,\n"
-        + "        \"isbn\": \"Spring\",\n"
-        + "        \"author\": \"Adhvik\"\n"
+        + "        \"course\": \"SpringBoot\",\n"
+        + "        \"id\": \"SpringBoot2022\",\n"
+        + "        \"category\": 2022,\n"
+        + "        \"author\": \"Parthiban Rajasekaran\"\n"
         + "    }\n"
         + "]";
     TestRestTemplate restTemplate = new TestRestTemplate();
-    ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/getBooks", String.class);
+    ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/getCourses", String.class);
     System.out.println(response.getStatusCode());
     System.out.println(response.getBody());
 
@@ -73,7 +66,7 @@ public class LibraryServiceTestsIT {
   }
 
 //  @Test
-  public void addBookTest(){
+  public void addCourseTest(){
     TestRestTemplate restTemplate = new TestRestTemplate();
 
     //request header
@@ -81,21 +74,20 @@ public class LibraryServiceTestsIT {
     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
     // request body
-    HttpEntity<Library> request = new HttpEntity<>(buildLibrary(),httpHeaders);
+    HttpEntity<Catalog> request = new HttpEntity<>(buildInventoryItem(),httpHeaders);
 
-    ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/addBook", request, String.class);
+    ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/addCourse", request, String.class);
     System.out.println(response.getStatusCode().value());
     System.out.println(response.getBody());
     assertEquals(201, response.getStatusCode().value());
   }
 
-  private Library buildLibrary(){
-    Library library = new Library();
-    library.setBook_name("Spring");
-    library.setAuthor("Adhvik");
-    library.setAisle(2022);
-    library.setIsbn("Spring");
-    return library;
+  private Catalog buildInventoryItem(){
+    Catalog catalog = new Catalog();
+    catalog.setCourse("Springboot");
+    catalog.setAuthor("Adhvik");
+    catalog.setCategory(2022);
+    return catalog;
   }
 
 }
