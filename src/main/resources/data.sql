@@ -1,2 +1,2 @@
-INSERT INTO Storage2(book_name,id,isbn,aisle,author) values('Appium-DummyData','fdsefr330','fdsefr3','30','Parthiban Rajasekaran');
-INSERT INTO Storage2(book_name,id,isbn,aisle,author) values('Selenium-DummyData','fdsefr440','fdsefr4','40','Parthiban Rajasekaran');
+INSERT INTO Inventory(course,id,category,author) values('Appium-DummyCourse','Appium-DummyCourse33',33,'Parthiban Rajasekaran');
+INSERT INTO Inventory(course,id,category,author) values('Selenium-DummyCourse','Selenium-DummyCourse77',77,'Parthiban Rajasekaran');
