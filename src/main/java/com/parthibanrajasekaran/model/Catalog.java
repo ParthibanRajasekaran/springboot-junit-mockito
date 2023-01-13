@@ -10,14 +10,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="Storage2")
+@Table(name="Inventory")
 @JsonInclude(Include.NON_NULL)
-public class Library {
+public class Catalog {
 
   @Getter
   @Setter
-  @Column(name = "book_name")
-  private String book_name = null;
+  @Column(name = "course")
+  private String course = null;
 
   @Getter
   @Setter
@@ -27,13 +27,8 @@ public class Library {
 
   @Getter
   @Setter
-  @Column(name = "aisle")
-  private int aisle= 0;
-
-  @Getter
-  @Setter
-  @Column(name = "isbn")
-  private String isbn= null;
+  @Column(name = "category")
+  private int category = 0;
 
   @Getter
   @Setter
@@ -41,7 +36,13 @@ public class Library {
   private String author= null;
 
 
+  public Catalog(String course, String id, int category, String author) {
+    this.course = course;
+    this.id = id;
+    this.category = category;
+    this.author = author;
+  }
 
-
-
+  public Catalog() {
+  }
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BookResponse {
+public class CourseResponse {
 
   @Getter
   @Setter
